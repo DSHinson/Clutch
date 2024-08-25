@@ -9,7 +9,18 @@ namespace TestApp
     {
         static void Main(string[] args)
         {
-            string sql = "SELECT id, name FROM users WHERE id = '123'";
+            Console.WriteLine("Enter select statement to be parsed, or EXIT to exit");
+            string sql = Console.ReadLine();
+
+            while (sql.ToUpper() != "EXIT") {
+                TestParser(sql);
+                Console.WriteLine("Enter select statement to be parsed, or EXIT to exit");
+                sql = Console.ReadLine();
+            }
+        }
+
+        static void TestParser(string sql)
+        {
             Tokenizer tokenizer = new Tokenizer(sql);
             SqlParser parser = new SqlParser(tokenizer);
 
@@ -21,8 +32,6 @@ namespace TestApp
             {
                 Console.WriteLine($"Where: {statement.WhereClause.Column} = {statement.WhereClause.Value}");
             }
-
-            Console.ReadKey();
         }
     }
 }

@@ -25,7 +25,7 @@ namespace ServerLibrary.Tokenizer
             }
             char current = _sql[_position];
 
-            if(char.IsLetter(current))
+            if(char.IsLetter(current) )
             { 
                 string word = ReadWhile(char.IsLetterOrDigit);
 
@@ -34,6 +34,11 @@ namespace ServerLibrary.Tokenizer
                     return new Token(TokenType.Keyword, word.ToUpper());
                 }
                 return new Token(TokenType.Identifier, word);
+            }
+            if (char.IsNumber(current))
+            {
+                string word = ReadWhile(char.IsLetterOrDigit);
+                return new Token(TokenType.Literal, word);
             }
 
             if (current == '=')
