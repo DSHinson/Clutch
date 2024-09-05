@@ -51,6 +51,16 @@ namespace ServerLibrary.Tokenizer
                 _position++;
                 return new Token(TokenType.Comma, ",");
             }
+            if (current == '(')
+            {
+                _position++;
+                return new Token(TokenType.OpenParenthesis, "(");
+            }
+            if (current == ')')
+            {
+                _position++;
+                return new Token(TokenType.CloseParenthesis, ")");
+            }
             if (char.IsWhiteSpace(current))
             {
                 _position++;
@@ -66,6 +76,15 @@ namespace ServerLibrary.Tokenizer
 
             throw new Exception($"Unexpected character: {current}");
 
+        }
+
+        public void movePastSpecialChar(char remove)
+        {
+            int index = _sql.IndexOf(remove); // Find the index of the first occurrence of the char
+            if (index != -1)
+            { // If the char exists in the string
+                _position = index;
+            }
         }
 
         private string ReadWhile(Func<char, bool> predicate)
@@ -85,6 +104,9 @@ namespace ServerLibrary.Tokenizer
                 "SELECT" => true,
                 "FROM" => true,
                 "WHERE" => true,
+                "INSERT" => true,
+                "INTO" => true,
+                "VALUES" => true,
                 _ => false,
             };
         }

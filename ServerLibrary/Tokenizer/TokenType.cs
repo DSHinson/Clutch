@@ -15,5 +15,7 @@ namespace ServerLibrary.Tokenizer
         Comma,
         Whitespace,
         EndOfFile,
+        OpenParenthesis,
+        CloseParenthesis
     }
 }

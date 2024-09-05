@@ -19,17 +19,10 @@ namespace ServerLibrary.SyntaxTree
             WhereClause = whereClause;
         }
 
-        // Method to execute or further manipulate the select statement
         public void Execute()
         {
             // Execution logic would go here, interacting with a database, etc.
         }
 
-        public override string ToString()
-        {
-            var columns = string.Join(", ", Columns);
-            var where = WhereClause != null ? $" WHERE {WhereClause}" : "";
-            return $"SELECT {columns} FROM {TableName}{where}";
-        }
     }
 }

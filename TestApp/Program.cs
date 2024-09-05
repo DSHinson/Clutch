@@ -21,17 +21,15 @@ namespace TestApp
 
         static void TestParser(string sql)
         {
-            Tokenizer tokenizer = new Tokenizer(sql);
-            SqlParser parser = new SqlParser(tokenizer);
-
-            SelectStatement statement = parser.ParseSelect();
+            var statement = (InsertStatement)(new QueryTypeCalculater().DetermineQueryType(sql).Value);
 
             Console.WriteLine($"Columns: {string.Join(", ", statement.Columns)}");
+            Console.WriteLine($"Values: {string.Join(", ", statement.Values)}");
             Console.WriteLine($"Table: {statement.TableName}");
-            if (statement.WhereClause != null)
-            {
-                Console.WriteLine($"Where: {statement.WhereClause.Column} = {statement.WhereClause.Value}");
-            }
+            //if (statement.WhereClause != null)
+            //{
+            //    Console.WriteLine($"Where: {statement.WhereClause.Column} = {statement.WhereClause.Value}");
+            //}
         }
     }
 }

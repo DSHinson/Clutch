@@ -1,0 +1,2 @@
+﻿SELECT name FROM Users WHERE name = 'bob'
+SELECT name FROM Users WHERE name = 'Dan'
