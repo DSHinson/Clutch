@@ -39,7 +39,7 @@ namespace ServerLibrary.Parser
                 whereClause = ParseWhereClause();
             }
 
-            return new SelectStatement(columns, tableName, whereClause);
+            return new SelectStatement(_tokenizer.getQuery(), columns, tableName, whereClause);
         }
 
         public InsertStatement ParseInsert()
@@ -71,7 +71,7 @@ namespace ServerLibrary.Parser
             }
 
             // Step 7: Return an InsertStatement object
-            return new InsertStatement(tableName, columns, values);
+            return new InsertStatement(_tokenizer.getQuery(),tableName, columns, values);
         }
 
         private List<string> ParseColumns()
@@ -126,7 +126,6 @@ namespace ServerLibrary.Parser
 
             return new WhereClause(column,"=", value);
         }
-        
         private string ParseIdentifier()
         {
             while (_currentToken.Type == TokenType.Whitespace || _currentToken.Type == TokenType.OpenParenthesis || _currentToken.Type == TokenType.CloseParenthesis)
@@ -138,7 +137,6 @@ namespace ServerLibrary.Parser
             _currentToken = _tokenizer.GetNextToken();
             return value;
         }
-
         private string ParseLiteral()
         {
             while (_currentToken.Type == TokenType.Whitespace || _currentToken.Type == TokenType.OpenParenthesis || _currentToken.Type == TokenType.CloseParenthesis)
@@ -149,7 +147,6 @@ namespace ServerLibrary.Parser
             Expect(TokenType.Literal);
             return value;
         }
-
         private void Expect(TokenType type, string value = null)
         {
             if (_currentToken.Type != type || (value != null && _currentToken.Value != value))
@@ -158,7 +155,6 @@ namespace ServerLibrary.Parser
             }
             _currentToken = _tokenizer.GetNextToken();
         }
-
         private bool Match(TokenType type, string value = null)
         {
             if (_currentToken.Type == type && (value == null || _currentToken.Value == value))

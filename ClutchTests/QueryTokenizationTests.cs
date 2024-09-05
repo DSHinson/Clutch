@@ -13,7 +13,31 @@ namespace ClutchTests
         [Test, TestCaseSource(nameof(GetTestCases))]
         public void Test1(string sql)
         {
-            var statement = (new QueryTypeCalculater().DetermineQueryType(sql).Value);
+            var statement = new QueryTypeCalculater().DetermineQueryType(sql);
+            bool matched = false;
+
+            statement.Switch(
+                (InsertStatement insert) => {
+                    Console.WriteLine($"This is an Insert query: {insert.Query}");
+                    matched = true;
+                },
+                (SelectStatement select) => {
+                    Console.WriteLine($"This is a Select query: {select.Query}");
+                    matched = true;
+                },
+                (DeleteStatement delete) => {
+                    Console.WriteLine($"This is a Delete query: {delete.Query}");
+                    matched = true;
+                },
+                (UpdateStatement update) => {
+                    Console.WriteLine($"This is an Update query: {update.Query}");
+                    matched = true;
+                }
+            );
+
+           Assert.IsTrue(matched);
+
+
         }
 
         public static IEnumerable<string> GetTestCases()

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,12 +9,14 @@ namespace ServerLibrary.SyntaxTree
 {
     public class SelectStatement
     {
+        public string Query { get; }
         public List<string> Columns { get; }
         public string TableName { get; }
         public WhereClause WhereClause { get; }
 
-        public SelectStatement(List<string> columns, string tableName, WhereClause whereClause)
+        public SelectStatement(string query,List<string> columns, string tableName, WhereClause whereClause)
         {
+            Query = query;
             Columns = columns;
             TableName = tableName;
             WhereClause = whereClause;

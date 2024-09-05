@@ -8,11 +8,12 @@ namespace ServerLibrary.SyntaxTree
 {
     public class InsertStatement
     {
+        public string Query { get; }
         public List<string> Columns { get; }
         public List<string> Values { get; }
         public string TableName { get; }
 
-        public InsertStatement(string tableName, List<string> columns, List<string> values)
+        public InsertStatement(string Query,string tableName, List<string> columns, List<string> values)
         {
             if (columns.Count != values.Count)
             {

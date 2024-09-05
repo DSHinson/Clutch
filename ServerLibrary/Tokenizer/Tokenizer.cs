@@ -17,6 +17,8 @@ namespace ServerLibrary.Tokenizer
             _position = 0;
         }
 
+        public string getQuery() => _sql;
+
         public Token GetNextToken() 
         {
             if (_position >= _sql.Length)

@@ -10,7 +10,7 @@ namespace ServerLibrary.Parser
 {
     public class QueryTypeCalculater
     {
-        public OneOf<InsertStatement, SelectStatement> DetermineQueryType(string sql)
+        public OneOf<InsertStatement, SelectStatement, DeleteStatement, UpdateStatement> DetermineQueryType(string sql)
         {
             if (string.IsNullOrWhiteSpace(sql))
             {
