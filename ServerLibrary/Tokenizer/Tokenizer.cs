@@ -114,6 +114,9 @@ namespace ServerLibrary.Tokenizer
                 "INSERT" => true,
                 "INTO" => true,
                 "VALUES" => true,
+                "UPDATE" => true,
+                "DELETE" => true,
+                "SET" => true,
                 _ => false,
             };
         }

@@ -28,11 +28,11 @@ namespace ServerLibrary.Parser
             {
                 return parser.ParseSelect();
             }
-            else if (sql.StartsWith("Update"))
+            else if (sql.StartsWith("UPDATE"))
             {
                 return parser.ParseUpdate();
             }
-            else if (sql.StartsWith("Delete"))
+            else if (sql.StartsWith("DELETE"))
             {
                 return parser.ParseDelete();
             }
