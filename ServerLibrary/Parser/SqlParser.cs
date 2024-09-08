@@ -74,6 +74,43 @@ namespace ServerLibrary.Parser
             return new InsertStatement(_tokenizer.getQuery(),tableName, columns, values);
         }
 
+        public DeleteStatement ParseDelete()
+        {
+            Expect(TokenType.Keyword, "DELETE");
+            while (_currentToken.Type == TokenType.Whitespace)
+            {
+                _currentToken = _tokenizer.GetNextToken();
+            }
+            Expect(TokenType.Keyword, "FROM");
+            string tableName = ParseIdentifier();
+            WhereClause whereClause = null;
+            if (Match(TokenType.Keyword, "WHERE"))
+            {
+                whereClause = ParseWhereClause();
+            }
+
+            return new DeleteStatement(_tokenizer.getQuery(), tableName, whereClause);
+        }
+
+        public UpdateStatement ParseUpdate() 
+        {
+            Expect(TokenType.Keyword, "UPDATE");
+
+            var tableName = ParseIdentifier();
+
+            Expect(TokenType.Keyword, "SET");
+
+            var setClauses = ParseSetClauses();
+
+            WhereClause whereClause = null;
+            if (Match(TokenType.Keyword, "WHERE"))
+            {
+                whereClause = ParseWhereClause();
+            }
+
+            return new UpdateStatement(tableName, setClauses, whereClause);
+        }
+
         private List<string> ParseColumns()
         {
             var columns = new List<string>();
@@ -136,6 +173,37 @@ namespace ServerLibrary.Parser
             Expect(TokenType.Identifier);
             _currentToken = _tokenizer.GetNextToken();
             return value;
+        }
+        private Dictionary<string, string> ParseSetClauses()
+        {
+            var setClauses = new Dictionary<string, string>();
+
+            do
+            {
+                // Parse column name
+                string column = ParseIdentifier();
+
+                // Expect '=' sign
+                Expect(TokenType.Operator, "=");
+
+                // Parse the value (it can be a literal or numeric)
+                string value = ParseLiteral();
+
+                // Add the column-value pair to the set clauses
+                setClauses.Add(column, value);
+
+                // Check if there is a comma (for multiple column-value pairs)
+                if (_currentToken.Type == TokenType.Comma)
+                {
+                    _currentToken = _tokenizer.GetNextToken(); // Consume the comma
+                }
+                else
+                {
+                    break;
+                }
+            } while (true);
+
+            return setClauses;
         }
         private string ParseLiteral()
         {

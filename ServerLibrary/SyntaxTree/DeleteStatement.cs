@@ -9,5 +9,19 @@ namespace ServerLibrary.SyntaxTree
     public class DeleteStatement
     {
         public string Query { get; }
+        public string TableName { get; }
+        public WhereClause WhereClause { get; }
+
+        public DeleteStatement(string query,  string tableName, WhereClause whereClause)
+        {
+            Query = query;
+            TableName = tableName;
+            WhereClause = whereClause;
+        }
+
+        public void Execute()
+        {
+            // Execution logic would go here, interacting with a database, etc.
+        }
     }
 }

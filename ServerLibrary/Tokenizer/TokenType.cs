@@ -16,6 +16,7 @@ namespace ServerLibrary.Tokenizer
         Whitespace,
         EndOfFile,
         OpenParenthesis,
-        CloseParenthesis
+        CloseParenthesis,
+        Equals
     }
 }
