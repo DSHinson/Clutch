@@ -28,6 +28,14 @@ namespace ServerLibrary.Parser
             {
                 return parser.ParseSelect();
             }
+            else if (sql.StartsWith("Update"))
+            {
+                return parser.ParseUpdate();
+            }
+            else if (sql.StartsWith("Delete"))
+            {
+                return parser.ParseDelete();
+            }
             else
             {
                 throw new NotSupportedException("Unsupported SQL query type.");

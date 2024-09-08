@@ -121,8 +121,14 @@ namespace ServerLibrary.Parser
                     _currentToken = _tokenizer.GetNextToken();
                 }
 
-                columns.Add(ParseIdentifier());
-            } while (_currentToken.Value !="FROM");
+                // here we handle when the next token is already loded but it is a keyword
+                if (_currentToken.Value != "FROM" && _currentToken.Value != "VALUES")
+                {
+                    columns.Add(ParseIdentifier());
+                }
+
+                
+            } while (_currentToken.Value !="FROM" && _currentToken.Value != "VALUES");
 
             return columns;
         }
@@ -132,6 +138,14 @@ namespace ServerLibrary.Parser
 
             do
             {
+                while (_currentToken.Type == TokenType.Whitespace)
+                {
+                    _currentToken = _tokenizer.GetNextToken();
+                }
+                if (_currentToken.Type == TokenType.OpenParenthesis)
+                {
+                    _currentToken = _tokenizer.GetNextToken();
+                }
                 if (_currentToken.Type == TokenType.Literal)
                 {
                     values.Add(_currentToken.Value);
