@@ -27,9 +27,9 @@ namespace ServerLibrary.Tokenizer
             }
             char current = _sql[_position];
 
-            if(char.IsLetter(current) )
-            { 
-                string word = ReadWhile(char.IsLetterOrDigit);
+            if(char.IsLetter(current))
+            {
+                string word = ReadWhile(c => char.IsLetterOrDigit(c) || c == '_');
 
                 if (IsKeyword(word))
                 {
@@ -62,6 +62,11 @@ namespace ServerLibrary.Tokenizer
             {
                 _position++;
                 return new Token(TokenType.CloseParenthesis, ")");
+            }
+            if (current == ';')
+            {
+                _position++;
+                return new Token(TokenType.EndOfFile, ";");
             }
             if (char.IsWhiteSpace(current))
             {
