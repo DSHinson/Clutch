@@ -1,5 +1,5 @@
 using ServerLibrary.Parser;
-using ServerLibrary.SyntaxTree;
+using ServerLibrary.Statements;
 
 namespace ClutchTests
 {
@@ -32,12 +32,16 @@ namespace ClutchTests
                 (UpdateStatement update) => {
                     Console.WriteLine($"This is an Update query: {update.Query}");
                     matched = true;
+                },
+                (CreateTableStatement create) => {
+                    Console.WriteLine($"This is a create table statement: {create.Query}");
+                    matched = true;
                 }
             );
 
            Assert.IsTrue(matched);
 
-
+            
         }
 
         public static IEnumerable<string> GetTestCases()
@@ -47,6 +51,9 @@ namespace ClutchTests
             {
                 yield return line;
             }
+
+            string CreatTableQuery = File.ReadAllText("CreateTableTests.txt");
+            yield return CreatTableQuery;
         }
     }
 }

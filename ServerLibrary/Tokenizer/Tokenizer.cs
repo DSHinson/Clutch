@@ -117,6 +117,8 @@ namespace ServerLibrary.Tokenizer
                 "UPDATE" => true,
                 "DELETE" => true,
                 "SET" => true,
+                "CREATE" => true,
+                "TABLE" => true,
                 _ => false,
             };
         }

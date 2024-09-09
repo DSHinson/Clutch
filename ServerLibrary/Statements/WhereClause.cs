@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ServerLibrary.SyntaxTree
+namespace ServerLibrary.Statements
 {
     public class WhereClause
     {

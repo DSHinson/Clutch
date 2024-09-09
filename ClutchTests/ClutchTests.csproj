@@ -26,6 +26,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="CreateTableTests.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="QueryTestCases.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

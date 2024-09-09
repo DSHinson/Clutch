@@ -1,5 +1,5 @@
 ﻿using ServerLibrary.Parser;
-using ServerLibrary.SyntaxTree;
+using ServerLibrary.Statements;
 using ServerLibrary.Tokenizer;
 using System;
 
@@ -21,15 +21,27 @@ namespace TestApp
 
         static void TestParser(string sql)
         {
-            var statement = (InsertStatement)(new QueryTypeCalculater().DetermineQueryType(sql).Value);
+            var statement = new QueryTypeCalculater().DetermineQueryType(sql);
+            bool matched = false;
 
-            Console.WriteLine($"Columns: {string.Join(", ", statement.Columns)}");
-            Console.WriteLine($"Values: {string.Join(", ", statement.Values)}");
-            Console.WriteLine($"Table: {statement.TableName}");
-            //if (statement.WhereClause != null)
-            //{
-            //    Console.WriteLine($"Where: {statement.WhereClause.Column} = {statement.WhereClause.Value}");
-            //}
+            statement.Switch(
+                (InsertStatement insert) => {
+                    Console.WriteLine($"This is an Insert query: {insert.Query}");
+                    matched = true;
+                },
+                (SelectStatement select) => {
+                    Console.WriteLine($"This is a Select query: {select.Query}");
+                    matched = true;
+                },
+                (DeleteStatement delete) => {
+                    Console.WriteLine($"This is a Delete query: {delete.Query}");
+                    matched = true;
+                },
+                (UpdateStatement update) => {
+                    Console.WriteLine($"This is an Update query: {update.Query}");
+                    matched = true;
+                }
+            );
         }
     }
 }
