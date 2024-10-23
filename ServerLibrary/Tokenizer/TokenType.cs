@@ -18,5 +18,6 @@ namespace ServerLibrary.Tokenizer
         OpenParenthesis,
         CloseParenthesis,
         Equals,
+        DataType
     }
 }

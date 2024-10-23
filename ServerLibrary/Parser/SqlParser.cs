@@ -134,6 +134,10 @@ namespace ServerLibrary.Parser
         {
             do
             {
+                while (_currentToken.Type == TokenType.Whitespace)
+                {
+                    _currentToken = _tokenizer.GetNextToken();
+                }
                 if (_currentToken.Type == TokenType.Keyword && _currentToken.Value.ToUpper() == "PRIMARY")
                 {
                     constraints.Add(ParsePrimaryKeyConstraint());
@@ -163,7 +167,16 @@ namespace ServerLibrary.Parser
             string columnName = ParseIdentifier();
 
             // Parse data type
-            string dataType = ParseIdentifier();
+            string dataType = ParseDataType();
+
+            if (_currentToken.Value == dataType)
+            {
+                _currentToken = _tokenizer.GetNextToken();
+                while (_currentToken.Type == TokenType.Whitespace)
+                {
+                    _currentToken = _tokenizer.GetNextToken();
+                }
+            }
 
             // Parse any optional constraints (e.g., NOT NULL, UNIQUE, etc.)
             var constraints = new List<string>();
@@ -171,6 +184,10 @@ namespace ServerLibrary.Parser
             {
                 constraints.Add(_currentToken.Value.ToUpper());
                 _currentToken = _tokenizer.GetNextToken();
+                while (_currentToken.Type == TokenType.Whitespace)
+                {
+                    _currentToken = _tokenizer.GetNextToken();
+                }
             }
 
             return new ColumnDefinition(columnName, dataType, constraints);
@@ -293,6 +310,28 @@ namespace ServerLibrary.Parser
             var value = _currentToken.Value;
             Expect(TokenType.Identifier);
             _currentToken = _tokenizer.GetNextToken();
+            return value;
+        }
+        private string ParseDataType()
+        {
+            string value = "";
+            do
+            {
+                
+                while (_currentToken.Type == TokenType.Whitespace || _currentToken.Type == TokenType.OpenParenthesis || _currentToken.Type == TokenType.CloseParenthesis)
+                {
+                    _currentToken = _tokenizer.GetNextToken();
+                }
+
+                value += _currentToken.Value;
+                if (_currentToken.Type == TokenType.Keyword)
+                {
+                    break;
+                }
+                Expect(TokenType.DataType);
+                _currentToken = _tokenizer.GetNextToken();
+            }
+            while (_currentToken.Type != TokenType.Comma);
             return value;
         }
         private Dictionary<string, string> ParseSetClauses()

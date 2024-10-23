@@ -41,6 +41,11 @@ namespace TestApp
                     Console.WriteLine($"This is an Update query: {update.Query}");
                     matched = true;
                 }
+                ,
+                (CreateTableStatement create) => {
+                    Console.WriteLine($"This is an Create table query: {create.Query}");
+                    matched = true;
+                }
             );
         }
     }

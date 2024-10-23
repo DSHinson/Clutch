@@ -35,6 +35,10 @@ namespace ServerLibrary.Tokenizer
                 {
                     return new Token(TokenType.Keyword, word.ToUpper());
                 }
+                if (IsDataType(word))
+                {
+                    return new Token(TokenType.DataType, word.ToUpper());
+                }
                 return new Token(TokenType.Identifier, word);
             }
             if (char.IsNumber(current))
@@ -119,6 +123,19 @@ namespace ServerLibrary.Tokenizer
                 "SET" => true,
                 "CREATE" => true,
                 "TABLE" => true,
+                "PRIMARY" => true,
+                "KEY" => true,
+                
+                _ => false,
+            };
+        }
+
+        private bool IsDataType(string word)
+        {
+            return word.ToUpper() switch
+            {
+                "VARCHAR" => true,
+                "INT" => true,
                 _ => false,
             };
         }
