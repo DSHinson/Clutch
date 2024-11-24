@@ -13,6 +13,7 @@ namespace ServerLibrary.Tokenizer
         Operator,
         Literal,
         Comma,
+        Semicolon,
         Whitespace,
         EndOfFile,
         OpenParenthesis,

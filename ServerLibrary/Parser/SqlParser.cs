@@ -38,7 +38,7 @@ namespace ServerLibrary.Parser
                 whereClause = ParseWhereClause();
             }
 
-            return new SelectStatement(_tokenizer.getQuery(), columns, tableName, whereClause);
+            return new SelectStatement(_tokenizer.GetQuery(), columns, tableName, whereClause);
         }
         public InsertStatement ParseInsert()
         {
@@ -69,7 +69,7 @@ namespace ServerLibrary.Parser
             }
 
             // Step 7: Return an InsertStatement object
-            return new InsertStatement(_tokenizer.getQuery(),tableName, columns, values);
+            return new InsertStatement(_tokenizer.GetQuery(),tableName, columns, values);
         }
         public DeleteStatement ParseDelete()
         {
@@ -86,7 +86,7 @@ namespace ServerLibrary.Parser
                 whereClause = ParseWhereClause();
             }
 
-            return new DeleteStatement(_tokenizer.getQuery(), tableName, whereClause);
+            return new DeleteStatement(_tokenizer.GetQuery(), tableName, whereClause);
         }
         public UpdateStatement ParseUpdate() 
         {
@@ -128,7 +128,7 @@ namespace ServerLibrary.Parser
             var constraints = new List<TableConstraint>();
             ParseColumnsWithConstraints(ref columns,ref constraints);
 
-            return new CreateTableStatement(_tokenizer.getQuery(),tableName, columns, constraints);
+            return new CreateTableStatement(_tokenizer.GetQuery(),tableName, columns, constraints);
         }
         private void ParseColumnsWithConstraints(ref List<ColumnDefinition> columns, ref List<TableConstraint> constraints) 
         {
@@ -168,6 +168,11 @@ namespace ServerLibrary.Parser
 
             // Parse data type
             string dataType = ParseDataType();
+
+            // validate datatype
+
+            //if (!)
+            //{ }
 
             if (_currentToken.Value == dataType)
             {
