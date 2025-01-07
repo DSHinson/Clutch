@@ -329,7 +329,7 @@ namespace ServerLibrary.Parser
                 }
 
                 value += _currentToken.Value;
-                if (_currentToken.Type == TokenType.Keyword)
+                if (_currentToken.Type == TokenType.DataType)
                 {
                     break;
                 }

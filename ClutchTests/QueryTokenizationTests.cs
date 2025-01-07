@@ -11,6 +11,7 @@ namespace ClutchTests
         }
 
         [Test, TestCaseSource(nameof(GetTestCases))]
+
         public void Test1(string sql)
         {
             var statement = new QueryTypeCalculater().DetermineQueryType(sql);
