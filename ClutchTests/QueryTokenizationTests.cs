@@ -11,7 +11,7 @@ namespace ClutchTests
         }
 
         [Test, TestCaseSource(nameof(GetTestCases))]
-        public void Test1(string sql)
+        public void SQLTokenizer_Should_Parse_Correctly(string sql)
         {
             var statement = new QueryTypeCalculater().DetermineQueryType(sql);
             bool matched = false;
