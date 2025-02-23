@@ -1,7 +1,7 @@
 using ServerLibrary.Parser;
 using ServerLibrary.Statements;
 
-namespace ClutchTests
+namespace Tokenizer.Tests
 {
     public class QueryTokenizationTests
     {
@@ -13,7 +13,7 @@ namespace ClutchTests
         [Test, TestCaseSource(nameof(GetTestCases))]
         public void SQLTokenizer_Should_Parse_Correctly(string sql)
         {
-            var statement = new QueryTypeCalculater().DetermineQueryType(sql);
+            var statement = QueryTypeCalculater.DetermineQueryType(sql);
             bool matched = false;
 
             statement.Switch(

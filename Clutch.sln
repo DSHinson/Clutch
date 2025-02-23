@@ -5,9 +5,6 @@ VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3F852206-BBA6-426A-A63F-1C7B4F4A22D9}"
 	ProjectSection(SolutionItems) = preProject
-		OverAllSpec.Md = OverAllSpec.Md
-		PhaseOneSpec.Md = PhaseOneSpec.Md
-		PhaseTwoSpec.Md = PhaseTwoSpec.Md
 		ReadMe.Md = ReadMe.Md
 	EndProjectSection
 EndProject
@@ -15,7 +12,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServerLibrary", "ServerLibr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestApp", "TestApp\TestApp.csproj", "{0EDDA473-8FEE-429C-A0C9-D3066317B549}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClutchTests", "ClutchTests\ClutchTests.csproj", "{7DAD5785-8647-4EFE-A8E0-C79B3F5D9008}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClutchTests", "ClutchTests\ClutchTests.csproj", "{7DAD5785-8647-4EFE-A8E0-C79B3F5D9008}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

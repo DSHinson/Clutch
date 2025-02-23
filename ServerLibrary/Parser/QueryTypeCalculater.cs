@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace ServerLibrary.Parser
 {
-    public class QueryTypeCalculater
+    public static class QueryTypeCalculater
     {
-        public OneOf<InsertStatement, SelectStatement, DeleteStatement, UpdateStatement, CreateTableStatement> DetermineQueryType(string sql)
+        public static OneOf<InsertStatement, SelectStatement, DeleteStatement, UpdateStatement, CreateTableStatement> DetermineQueryType(string sql)
         {
             if (string.IsNullOrWhiteSpace(sql))
             {
