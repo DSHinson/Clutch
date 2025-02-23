@@ -21,7 +21,7 @@ namespace TestApp
 
         static void TestParser(string sql)
         {
-            var statement = new QueryTypeCalculater().DetermineQueryType(sql);
+            var statement = QueryTypeCalculater.DetermineQueryType(sql);
             bool matched = false;
 
             statement.Switch(
