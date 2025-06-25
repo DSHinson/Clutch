@@ -1,6 +1,8 @@
-﻿using ServerLibrary.Parser;
+﻿using ServerLibrary.Handlers;
+using ServerLibrary.Parser;
 using ServerLibrary.Statements;
 using ServerLibrary.Storage.Transaction;
+using ServerLibrary.Storage.Write;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,10 +15,12 @@ namespace ServerLibrary.Dispatcher
     {
         private readonly TransactionManager _transactionManager;
         private readonly SqlParser _sqlParser;
+        private readonly IBinaryWriter _binaryWriter;
 
-        public QueryDispatcher(TransactionManager transactionManager)
+        public QueryDispatcher(TransactionManager transactionManager, IBinaryWriter binaryWriter)
         {
             _transactionManager = transactionManager ?? throw new ArgumentNullException(nameof(transactionManager));
+            _binaryWriter = binaryWriter ?? throw new ArgumentNullException(nameof(binaryWriter));
         }
 
         public async Task ExecuteQueryAsync(string sql)
@@ -24,15 +28,19 @@ namespace ServerLibrary.Dispatcher
             var queryType = QueryTypeCalculater.DetermineQueryType(sql);
 
             queryType.Switch(
-              (InsertStatement insert) => {
+              async (InsertStatement insert) => {
+
               },
-              (SelectStatement select) => {
+              async (SelectStatement select) => {
               },
-              (DeleteStatement delete) => {
+              async (DeleteStatement delete) => {
               },
-              (UpdateStatement update) => {
+              async (UpdateStatement update) => {
               },
-              (CreateTableStatement create) => {
+              async (CreateTableStatement create) => {
+                  //the create query handler is unique because the tabkle does not exists and there fore we dont have to worry about resource locking
+                  CreateTableHandler createTableHandler = new CreateTableHandler(create, _binaryWriter);
+                  await createTableHandler.ExecuteStatement();
               }
           );
         }
