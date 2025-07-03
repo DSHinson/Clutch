@@ -4,7 +4,7 @@ using ServerLibrary.Statements;
 using ServerLibrary.Storage.Write;
 using ServerLibrary.Storage.Write.ToDisk;
 
-namespace ServerLibrary.Tests
+namespace ClutchTests.FunctionalTests
 {
     [TestFixture]
     internal class HandlerTests
@@ -22,7 +22,7 @@ namespace ServerLibrary.Tests
         [Test]
         public async Task HandlerTest1()
         {
-            string CreatTableQuery = File.ReadAllText("CreateTableTests.txt");
+            string CreatTableQuery = File.ReadAllText("TestData/CreateTableTests.txt");
             var statement = QueryTypeCalculater.DetermineQueryType(CreatTableQuery);
 
      

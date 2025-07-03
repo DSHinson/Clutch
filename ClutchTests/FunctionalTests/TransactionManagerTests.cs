@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using NUnit.Framework;
 using ServerLibrary.Storage.Transaction;
 
-namespace ServerLibrary.Tests
+namespace ClutchTests.FunctionalTests
 {
     [TestFixture]
     public class TransactionManagerTests

@@ -1,7 +1,7 @@
 using ServerLibrary.Parser;
 using ServerLibrary.Statements;
 
-namespace Tokenizer.Tests
+namespace ClutchTests.FunctionalTests
 {
     public class QueryTokenizationTests
     {
@@ -17,23 +17,23 @@ namespace Tokenizer.Tests
             bool matched = false;
 
             statement.Switch(
-                (InsertStatement insert) => {
+                (insert) => {
                     Console.WriteLine($"This is an Insert query: {insert.Query}");
                     matched = true;
                 },
-                (SelectStatement select) => {
+                (select) => {
                     Console.WriteLine($"This is a Select query: {select.Query}");
                     matched = true;
                 },
-                (DeleteStatement delete) => {
+                (delete) => {
                     Console.WriteLine($"This is a Delete query: {delete.Query}");
                     matched = true;
                 },
-                (UpdateStatement update) => {
+                (update) => {
                     Console.WriteLine($"This is an Update query: {update.Query}");
                     matched = true;
                 },
-                (CreateTableStatement create) => {
+                (create) => {
                     Console.WriteLine($"This is a create table statement: {create.Query}");
                     matched = true;
                 }
@@ -44,13 +44,13 @@ namespace Tokenizer.Tests
 
         public static IEnumerable<string> GetTestCases()
         {
-            var lines = File.ReadAllLines("QueryTestCases.txt");
+            var lines = File.ReadAllLines("TestData/QueryTestCases.txt");
             foreach (var line in lines)
             {
                 yield return line;
             }
 
-            string CreatTableQuery = File.ReadAllText("CreateTableTests.txt");
+            string CreatTableQuery = File.ReadAllText("TestData/CreateTableTests.txt");
             yield return CreatTableQuery;
         }
     }

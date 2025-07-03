@@ -15,7 +15,6 @@ namespace ServerLibrary.Storage.Write.ToDisk
         /// Opens the file if not already opened, then appends the data.
         /// </summary>
         /// <param name="data">The binary data to write.</param>
-        /// <param name="tableName">The name of the table file.</param>
         /// <returns>True if the write was successful, otherwise false.</returns>
         public async Task<bool> WriteAsync(byte[] data)
         {
