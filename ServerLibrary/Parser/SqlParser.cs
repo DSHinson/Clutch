@@ -29,9 +29,15 @@ namespace ServerLibrary.Parser
                 _currentToken = _tokenizer.GetNextToken();
             }
             Expect(TokenType.Keyword, "FROM");
-
+            while (_currentToken.Type == TokenType.Whitespace)
+            {
+                _currentToken = _tokenizer.GetNextToken();
+            }
             var tableName = ParseIdentifier();
-
+            while (_currentToken.Type == TokenType.Whitespace)
+            {
+                _currentToken = _tokenizer.GetNextToken();
+            }
             WhereClause whereClause = null;
             if (Match(TokenType.Keyword, "WHERE"))
             {
@@ -91,13 +97,25 @@ namespace ServerLibrary.Parser
         public UpdateStatement ParseUpdate() 
         {
             Expect(TokenType.Keyword, "UPDATE");
-
+            while (_currentToken.Type == TokenType.Whitespace)
+            {
+                _currentToken = _tokenizer.GetNextToken();
+            }
             var tableName = ParseIdentifier();
-
+            while (_currentToken.Type == TokenType.Whitespace)
+            {
+                _currentToken = _tokenizer.GetNextToken();
+            }
             Expect(TokenType.Keyword, "SET");
-
+            while (_currentToken.Type == TokenType.Whitespace)
+            {
+                _currentToken = _tokenizer.GetNextToken();
+            }
             var setClauses = ParseSetClauses();
-
+            while (_currentToken.Type == TokenType.Whitespace)
+            {
+                _currentToken = _tokenizer.GetNextToken();
+            }
             WhereClause whereClause = null;
             if (Match(TokenType.Keyword, "WHERE"))
             {
@@ -123,6 +141,10 @@ namespace ServerLibrary.Parser
                 _currentToken = _tokenizer.GetNextToken();
             }
             var tableName = ParseIdentifier();
+            while (_currentToken.Type == TokenType.Whitespace)
+            {
+                _currentToken = _tokenizer.GetNextToken();
+            }
             Expect(TokenType.OpenParenthesis, "(");
             var columns = new List<ColumnDefinition>();
             var constraints = new List<TableConstraint>();
@@ -142,7 +164,7 @@ namespace ServerLibrary.Parser
                 {
                     constraints.Add(ParsePrimaryKeyConstraint());
                 }
-                else if (_currentToken.Type == TokenType.Keyword && _currentToken.Value.ToUpper() == "FOREIGN")
+                else if (_currentToken.Type == TokenType.Keyword && _currentToken.Value.ToUpper() == "CONSTRAINT")
                 {
                     constraints.Add(ParseForeignKeyConstraint());
                 }
@@ -163,18 +185,28 @@ namespace ServerLibrary.Parser
         }
         private ColumnDefinition ParseColumnDefinition()
         {
+            List<string> constraints = new List<string>();
+
+
             // Parse column name
             string columnName = ParseIdentifier();
 
             // Parse data type
             string dataType = ParseDataType();
 
-            // validate datatype
+            // Parse data type constraint ie varchar(50)
+            string dataTypeConstraint = ParseDataTypeConstraint();
 
-            //if (!)
-            //{ }
+            if (!string.IsNullOrEmpty(dataTypeConstraint))
+            {
+                constraints.Add(dataTypeConstraint);
+            }
 
-            if (_currentToken.Value == dataType)
+            //TODO: Handle default size contstraints for data types INT -> INT(11) etc.
+
+            //
+
+            if (_currentToken.Value == dataType || _currentToken.Type == TokenType.CloseParenthesis)
             {
                 _currentToken = _tokenizer.GetNextToken();
                 while (_currentToken.Type == TokenType.Whitespace)
@@ -184,7 +216,7 @@ namespace ServerLibrary.Parser
             }
 
             // Parse any optional constraints (e.g., NOT NULL, UNIQUE, etc.)
-            var constraints = new List<string>();
+           
             while (_currentToken.Type == TokenType.Keyword)
             {
                 constraints.Add(_currentToken.Value.ToUpper());
@@ -196,6 +228,35 @@ namespace ServerLibrary.Parser
             }
 
             return new ColumnDefinition(columnName, dataType, constraints);
+        }
+        private string ParseDataTypeConstraint()
+        {
+            string constraint = "";
+            if (_currentToken.Type == TokenType.DataType)
+            {
+                //Still on the data type token, advance to the next token in the hopes of consuming an opening parenthesis
+                _currentToken = _tokenizer.GetNextToken();
+                while (_currentToken.Type == TokenType.Whitespace)
+                {
+                    _currentToken = _tokenizer.GetNextToken();
+                }
+            }
+
+            if (_currentToken.Type != TokenType.OpenParenthesis)
+            {
+                return constraint;
+            }
+            //Current token is '('
+            while (_currentToken.Type != TokenType.CloseParenthesis)
+            {
+                //Consume the size value inside the parenthesis
+                _currentToken = _tokenizer.GetNextToken();
+                if (_currentToken.Type != TokenType.CloseParenthesis)
+                {
+                    constraint += _currentToken.Value; 
+                }
+            }
+            return constraint;
         }
         private PrimaryKeyConstraint ParsePrimaryKeyConstraint()
         {
@@ -216,29 +277,73 @@ namespace ServerLibrary.Parser
         }
         private ForeignKeyConstraint ParseForeignKeyConstraint()
         {
-            // Expect "FOREIGN KEY" keywords
-            Expect(TokenType.Keyword, "FOREIGN");
-            Expect(TokenType.Keyword, "KEY");
+            Expect(TokenType.Keyword, "CONSTRAINT");
 
+            while (_currentToken.Type == TokenType.Whitespace)
+            {
+                _currentToken = _tokenizer.GetNextToken();
+            }
+            //Get constraint name
+            string contraintName = ParseIdentifier();
+            while (_currentToken.Type == TokenType.Whitespace)
+            {
+                _currentToken = _tokenizer.GetNextToken();
+            }
+            // Expect "CONSTRAINT" keywords
+            Expect(TokenType.Keyword, "FOREIGN");
+            while (_currentToken.Type == TokenType.Whitespace)
+            {
+                _currentToken = _tokenizer.GetNextToken();
+            }
+            
+            Expect(TokenType.Keyword, "KEY");
+            while (_currentToken.Type == TokenType.Whitespace)
+            {
+                _currentToken = _tokenizer.GetNextToken();
+            }
             // Expect '('
             Expect(TokenType.OpenParenthesis,"(");
-
+            while (_currentToken.Type == TokenType.Whitespace)
+            {
+                _currentToken = _tokenizer.GetNextToken();
+            }
             // Parse the foreign key column
             string column = ParseIdentifier();
-
+            while (_currentToken.Type == TokenType.Whitespace)
+            {
+                _currentToken = _tokenizer.GetNextToken();
+            }
             // Expect ')'
             Expect(TokenType.CloseParenthesis,")");
-
+            while (_currentToken.Type == TokenType.Whitespace)
+            {
+                _currentToken = _tokenizer.GetNextToken();
+            }
             // Expect "REFERENCES" keyword
             Expect(TokenType.Keyword, "REFERENCES");
-
+            while (_currentToken.Type == TokenType.Whitespace)
+            {
+                _currentToken = _tokenizer.GetNextToken();
+            }
             // Parse the referenced table and column
-            string referencedTable = ParseIdentifier();
+            string referencedTable = ParseIdentifier(); 
+            while (_currentToken.Type == TokenType.Whitespace)
+            {
+                _currentToken = _tokenizer.GetNextToken();
+            }
             Expect(TokenType.OpenParenthesis, "(");
+            while (_currentToken.Type == TokenType.Whitespace)
+            {
+                _currentToken = _tokenizer.GetNextToken();
+            }
             string referencedColumn = ParseIdentifier();
+            while (_currentToken.Type == TokenType.Whitespace)
+            {
+                _currentToken = _tokenizer.GetNextToken();
+            }
             Expect(TokenType.CloseParenthesis, ")");
 
-            return new ForeignKeyConstraint(column, referencedTable, referencedColumn);
+            return new ForeignKeyConstraint(contraintName,column, referencedTable, referencedColumn);
         }
         private List<string> ParseColumns()
         {
@@ -254,10 +359,21 @@ namespace ServerLibrary.Parser
                 if (_currentToken.Value != "FROM" && _currentToken.Value != "VALUES")
                 {
                     columns.Add(ParseIdentifier());
+                    //Expect columns to contain commas between them after moving past any white spaces
+                    while (_currentToken.Type == TokenType.Whitespace)
+                    {
+                        _currentToken = _tokenizer.GetNextToken();
+                    }
+                    
                 }
-
-                
-            } while (_currentToken.Value !="FROM" && _currentToken.Value != "VALUES");
+                // Check again if we hit the end of the column list
+                if (_currentToken.Value != "FROM" && _currentToken.Value != "VALUES")
+                {
+                    //Move past the comma/ CloseParenthesis  if there is one
+                    Expect(TokenType.Comma, TokenType.CloseParenthesis);
+                }
+            }
+            while (_currentToken.Value !="FROM" && _currentToken.Value != "VALUES");
 
             return columns;
         }
@@ -301,7 +417,15 @@ namespace ServerLibrary.Parser
         private WhereClause ParseWhereClause()
         {
             var column = ParseIdentifier();
+            while (_currentToken.Type == TokenType.Whitespace)
+            {
+                _currentToken = _tokenizer.GetNextToken();
+            }
             Expect(TokenType.Operator, "=");
+            while (_currentToken.Type == TokenType.Whitespace)
+            {
+                _currentToken = _tokenizer.GetNextToken();
+            }
             var value = ParseLiteral();
 
             return new WhereClause(column,"=", value);
@@ -314,7 +438,7 @@ namespace ServerLibrary.Parser
             }
             var value = _currentToken.Value;
             Expect(TokenType.Identifier);
-            _currentToken = _tokenizer.GetNextToken();
+            //_currentToken = _tokenizer.GetNextToken();
             return value;
         }
         private string ParseDataType()
@@ -347,13 +471,22 @@ namespace ServerLibrary.Parser
             {
                 // Parse column name
                 string column = ParseIdentifier();
-
+                while (_currentToken.Type == TokenType.Whitespace)
+                {
+                    _currentToken = _tokenizer.GetNextToken();
+                }
                 // Expect '=' sign
                 Expect(TokenType.Operator, "=");
-
+                while (_currentToken.Type == TokenType.Whitespace)
+                {
+                    _currentToken = _tokenizer.GetNextToken();
+                }
                 // Parse the value (it can be a literal or numeric)
                 string value = ParseLiteral();
-
+                while (_currentToken.Type == TokenType.Whitespace)
+                {
+                    _currentToken = _tokenizer.GetNextToken();
+                }
                 // Add the column-value pair to the set clauses
                 setClauses.Add(column, value);
 
@@ -388,6 +521,22 @@ namespace ServerLibrary.Parser
             }
             _currentToken = _tokenizer.GetNextToken();
         }
+        private void Expect(params TokenType[] expectedTypes)
+        {
+            foreach (var type in expectedTypes)
+            {
+                if (_currentToken.Type == type)
+                {
+                    _currentToken = _tokenizer.GetNextToken();
+                    return;
+                }
+            }
+
+            throw new Exception(
+                $"Expected {string.Join(" or ", expectedTypes)}, but found {_currentToken.Type} '{_currentToken.Value}'"
+            );
+        }
+
         private bool Match(TokenType type, string value = null)
         {
             if (_currentToken.Type == type && (value == null || _currentToken.Value == value))

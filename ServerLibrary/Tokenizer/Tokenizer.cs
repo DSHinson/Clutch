@@ -177,6 +177,12 @@ namespace ServerLibrary.Tokenizer
                 "TABLE" => true,
                 "PRIMARY" => true,
                 "KEY" => true,
+                "NOT" => true,
+                "NULL" => true,
+                "UNIQUE" => true,
+                "CONSTRAINT" => true,
+                "FOREIGN" => true,
+                "REFERENCES" => true,
                 _ => false,
             };
         }
@@ -195,6 +201,7 @@ namespace ServerLibrary.Tokenizer
                 "FLOAT" => true,
                 "VARCHAR" => true,
                 "INT" => true,
+                "DECIMAL" => true,
                 _ => false,
             };
         }

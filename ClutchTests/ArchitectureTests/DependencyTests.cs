@@ -11,7 +11,7 @@ namespace Architecture.Tests
     public class DependencyTests
     {
         [Test]
-        public void test1()
+        public void ShouldNotReferenceTestProjects()
         {
             var productionAssembly = Assembly.Load("ServerLibrary"); 
 

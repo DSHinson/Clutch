@@ -8,12 +8,14 @@ namespace ServerLibrary.Statements
 {
     public class ForeignKeyConstraint : TableConstraint
     {
+        public string Name { get;}
         public string Column { get; }
         public string ReferencedTable { get; }
         public string ReferencedColumn { get; }
 
-        public ForeignKeyConstraint(string column, string referencedTable, string referencedColumn)
+        public ForeignKeyConstraint(string name,string column, string referencedTable, string referencedColumn)
         {
+            Name = name;
             Column = column;
             ReferencedTable = referencedTable;
             ReferencedColumn = referencedColumn;
